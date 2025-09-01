@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Contact with JS</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+        a {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Save Our Contact!</h1>
+    <p>Click the button below to add our contact details to your phone.</p>
+
+    <a id="save-contact-link" href="#">Save Contact to Phone</a>
+
+    <script>
+        // Wait for the page to fully load
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // 1. Define your contact information
+            const contact = {
+                firstName: 'John',
+                lastName: 'Doe',
+                phone: '+1234567890',
+                email: 'john.doe@example.com',
+                company: 'Example Corp'
+            };
+
+            // 2. Create the vCard data as a string
+            // The \r\n is for proper line breaks in the vCard standard
+            const vCardData = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                `N:${contact.lastName};${contact.firstName};;;`,
+                `FN:${contact.firstName} ${contact.lastName}`,
+                `TEL;TYPE=CELL:${contact.phone}`,
+                `EMAIL:${contact.email}`,
+                `ORG:${contact.company}`,
+                'END:VCARD'
+            ].join('\r\n');
+
+            // 3. Create a Blob from the vCard data
+            // A Blob is like a file stored in the browser's memory
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+
+            // 4. Create a temporary URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // 5. Find the link on the page and update its attributes
+            const link = document.getElementById('save-contact-link');
+            link.setAttribute('href', url);
+
+            // The 'download' attribute tells the browser to download the file
+            // instead of navigating to the URL. The value is the suggested filename.
+            link.setAttribute('download', 'contact.vcf');
+
+        });
+    </script>
+
+</body>
+</html>
